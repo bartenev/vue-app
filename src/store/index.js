@@ -21,8 +21,16 @@ export default new Vuex.Store({
     actions: {
         async getPosts(context) {
             const response = await axios.get('http://jsonplaceholder.typicode.com/posts')
-            context.commit('setPosts', response.data)
-            console.log(response.data)
+            const data = response.data.map(item => {
+                return {
+                    userId: item.userId,
+                    id: item.id,
+                    title: item.title,
+                    description: item.body,
+                }
+            })
+            context.commit('setPosts', data)
+            console.log(data)
         },
         async getPostById(context, postId) {
             return await axios.get('http://jsonplaceholder.typicode.com/posts', postId)

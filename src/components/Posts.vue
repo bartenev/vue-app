@@ -15,6 +15,7 @@
 </template>
 
 <script>
+
 import Post from "./Post";
 import {mapGetters} from "vuex";
 
