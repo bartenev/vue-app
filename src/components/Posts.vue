@@ -4,7 +4,7 @@
     <ul class="posts__list">
       <li
           class="posts__item"
-          v-for="post in posts"
+          v-for="post in filteredPosts"
           :key="post.id"
           @click="clickOnPost"
       >
@@ -16,50 +16,13 @@
 
 <script>
 import Post from "./Post";
+import {mapGetters} from "vuex";
+
 export default {
   name: 'Posts',
   components: {Post},
-  data () {
-    return {
-      posts: [
-        {
-          title: `title`,
-          description: `description`,
-          userId: 1,
-          id: 1,
-        },
-        {
-          title: `title`,
-          description: `description`,
-          userId: 1,
-          id: 2,
-        },
-        {
-          title: `title`,
-          description: `description`,
-          userId: 1,
-          id: 3,
-        },
-        {
-          title: `title`,
-          description: `description`,
-          userId: 2,
-          id: 4,
-        },
-        {
-          title: `title`,
-          description: `description`,
-          userId: 2,
-          id: 5,
-        },
-        {
-          title: `title`,
-          description: `description`,
-          userId: 3,
-          id: 6,
-        },
-      ],
-    }
+  computed: {
+    ...mapGetters(["filteredPosts"]),
   },
   methods: {
     clickOnPost () {
