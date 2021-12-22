@@ -2,7 +2,7 @@
   <article class="post">
     <h2 class="post__title">{{data.title}}</h2>
     <p class="post__description">{{data.description}}</p>
-    <span class="post__id">{{data.id}}</span>
+    <span class="post__id">{{data.userId}}</span>
   </article>
 </template>
 
