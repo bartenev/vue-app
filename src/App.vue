@@ -5,21 +5,10 @@
 </template>
 
 <script>
-import {mapActions} from "vuex";
 
 export default {
   name: 'App',
   components: {
-  },
-  created() {
-    this.fetchData()
-  },
-  methods: {
-    ...mapActions(["getPosts"]),
-
-    fetchData() {
-      this.getPosts()
-    },
   }
 }
 </script>

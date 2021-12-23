@@ -59,12 +59,16 @@ export default {
       }
     }
   },
+  created() {
+    this.fetchData()
+  },
   computed: {
     ...mapGetters(["getFilteredPosts", "getUserIds"]),
   },
   methods: {
+    ...mapActions(["getPosts"]),
     ...mapMutations(["setFilters", "clearPostsIdByUserId"]),
-    ...mapActions(["getPostsByUserId"]),
+    ...mapActions(["getPosts", "getPostsByUserId"]),
     onClickSubmitFilter() {
       if (this.filters.userId) {
         this.getPostsByUserId(this.filters.userId);
@@ -75,7 +79,10 @@ export default {
     },
     onClickPost () {
       console.log(`click`)
-    }
+    },
+    fetchData() {
+      this.getPosts()
+    },
   }
 }
 
