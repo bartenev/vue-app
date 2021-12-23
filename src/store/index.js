@@ -7,20 +7,22 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         posts: [],
-        filters: {
-            search: '',
-            userId: null,
-        },
+        search: '',
+        postsIdByUserId: [],
     },
     getters: {
         getFilteredPosts(state) {
-
-            let filters = state.filters;
-            let filtered = state.posts
-                .filter(post => {
-                    return filters.search === '' || post.title.indexOf(filters.search) !== -1 || post.description.indexOf(filters.search) !== -1;
-                });
-            console.log(filtered);
+            let posts = state.posts;
+            let filtered = [];
+            for (let post of posts) {
+                if (state.search !== '' && post.title.indexOf(state.search) === -1 && post.description.indexOf(state.search) === -1) {
+                    continue;
+                }
+                if (state.postsIdByUserId.length && !state.postsIdByUserId.includes(post.id)) {
+                    continue;
+                }
+                filtered.push(post);
+            }
             return filtered
         },
         getUserIds(state) {
@@ -29,31 +31,37 @@ export default new Vuex.Store({
     },
     mutations: {
         setPosts(state, payload) {
-            state.posts = payload;
+            state.posts = [...payload];
+        },
+        setPostsIdByUserId(state, payload) {
+            state.postsIdByUserId = [...payload];
+        },
+        clearPostsIdByUserId(state) {
+            state.postsIdByUserId = [];
         },
         setFilters(state, payload) {
-            console.log('setFilters')
-            state.filters = payload;
+            state.search = payload;
         },
     },
     actions: {
-        async getPosts(context) {
-            const response = await axios.get('http://jsonplaceholder.typicode.com/posts')
-            const data = response.data.map(item => {
+        async getPosts({commit}) {
+            const RESPONSE = await axios.get('http://jsonplaceholder.typicode.com/posts')
+            const DATA = RESPONSE.data.map(ITEM => {
                 return {
-                    userId: item.userId,
-                    id: item.id,
-                    title: item.title,
-                    description: item.body,
+                    userId: ITEM.userId,
+                    id: ITEM.id,
+                    title: ITEM.title,
+                    description: ITEM.body,
                 }
             })
-            context.commit('setPosts', data)
-            console.log(data)
+            commit('setPosts', DATA)
         },
-        async getPostsByUserId(context, userId) {
-            const response = await axios.get('http://jsonplaceholder.typicode.com/posts?userId=', userId)
-            const data = response.data;
-            context.commit('setPosts', data)
+        async getPostsByUserId({commit}, userId) {
+            const RESPONSE = await axios.get(`http://jsonplaceholder.typicode.com/posts?userId=${userId}`)
+            const DATA = RESPONSE.data.map(POST => {
+                return POST.id;
+            });
+            commit('setPostsIdByUserId', DATA)
         },
         async getPostById(context, postId) {
             return await axios.get('http://jsonplaceholder.typicode.com/posts', postId)

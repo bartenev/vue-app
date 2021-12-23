@@ -27,7 +27,7 @@
         </select>
       </div>
       <div class="filter__field">
-        <input type="submit" value="Отфильтровать" @click.prevent="setFilters(filters)">
+        <input type="submit" value="Отфильтровать" @click.prevent="onClickSubmitFilter">
       </div>
     </form>
     <ul class="posts__list">
@@ -35,7 +35,7 @@
           class="posts__item"
           v-for="post in getFilteredPosts"
           :key="post.id"
-          @click="clickOnPost"
+          @click="onClickPost"
       >
         <Post :data="{title: post.title, description: post.description, userId: post.userId}"/>
       </li>
@@ -46,7 +46,7 @@
 <script>
 
 import Post from "./Post";
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
   name: 'Posts',
@@ -63,8 +63,17 @@ export default {
     ...mapGetters(["getFilteredPosts", "getUserIds"]),
   },
   methods: {
-    ...mapMutations(["setFilters"]),
-    clickOnPost () {
+    ...mapMutations(["setFilters", "clearPostsIdByUserId"]),
+    ...mapActions(["getPostsByUserId"]),
+    onClickSubmitFilter() {
+      if (this.filters.userId) {
+        this.getPostsByUserId(this.filters.userId);
+      } else {
+        this.clearPostsIdByUserId();
+      }
+      this.setFilters(this.filters.search);
+    },
+    onClickPost () {
       console.log(`click`)
     }
   }
