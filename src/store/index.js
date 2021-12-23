@@ -36,6 +36,9 @@ export default new Vuex.Store({
         setPostsIdByUserId(state, payload) {
             state.postsIdByUserId = [...payload];
         },
+        deletePostById(state, payload) {
+            state.posts = [...state.posts.filter(post => post.id !== payload)];
+        },
         clearPostsIdByUserId(state) {
             state.postsIdByUserId = [];
         },
@@ -65,7 +68,12 @@ export default new Vuex.Store({
         },
         async getPostById(context, postId) {
             return await axios.get('http://jsonplaceholder.typicode.com/posts', postId)
-        }
+        },
+        async deletePostById({commit}, postId) {
+            axios.delete(`http://jsonplaceholder.typicode.com/posts/${postId}`)
+                .then(() => commit('deletePostById', postId))
+                .catch(() => console.log(`error`))
+        },
     }
 });
 

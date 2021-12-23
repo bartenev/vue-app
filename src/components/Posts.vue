@@ -35,9 +35,10 @@
           class="posts__item"
           v-for="post in getFilteredPosts"
           :key="post.id"
-          @click="onClickPost"
+          :id="post.id"
+          @click="onClickPost($event)"
       >
-        <Post :data="{title: post.title, description: post.description, userId: post.userId}"/>
+        <Post :data="{title: post.title, description: post.description, userId: post.userId, id: post.id}"/>
       </li>
     </ul>
   </section>
@@ -78,7 +79,7 @@ export default {
       this.setFilters(this.filters.search);
     },
     onClickPost () {
-      console.log(`click`)
+      // this.deletePostById(Number(evt.currentTarget.id));
     },
     fetchData() {
       this.getPosts()
