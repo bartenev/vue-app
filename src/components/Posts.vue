@@ -47,7 +47,7 @@
 <script>
 
 import Post from "./Post";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: 'Posts',
@@ -60,29 +60,33 @@ export default {
       }
     }
   },
+
   created() {
     this.fetchData()
   },
+
   computed: {
     ...mapGetters(["getFilteredPosts", "getUserIds"]),
   },
+
   methods: {
-    ...mapActions(["getPosts"]),
-    ...mapMutations(["setFilters", "clearPostsIdByUserId"]),
-    ...mapActions(["getPosts", "getPostsByUserId"]),
+    ...mapActions(["GET_POSTS", "GET_POSTS_BY_USER_ID", "SET_FILTERS", "CLEAR_POSTS_ID_BY_USER_ID"]),
+
     onClickSubmitFilter() {
       if (this.filters.userId) {
-        this.getPostsByUserId(this.filters.userId);
+        this.GET_POSTS_BY_USER_ID(this.filters.userId);
       } else {
-        this.clearPostsIdByUserId();
+        this.CLEAR_POSTS_ID_BY_USER_ID();
       }
-      this.setFilters(this.filters.search);
+      this.SET_FILTERS(this.filters.search);
     },
+
     onClickPost () {
       // this.deletePostById(Number(evt.currentTarget.id));
     },
+
     fetchData() {
-      this.getPosts()
+      this.GET_POSTS()
     },
   }
 }

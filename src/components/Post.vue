@@ -16,9 +16,9 @@ export default {
     data: Object
   },
   methods: {
-    ...mapActions(["deletePostById"]),
+    ...mapActions(["DELETE_POST_BY_ID"]),
     onClickDeleteButton (id) {
-      this.deletePostById(id);
+      this.DELETE_POST_BY_ID(id);
     },
   }
 }

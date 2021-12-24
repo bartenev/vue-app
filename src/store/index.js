@@ -12,31 +12,34 @@ export default new Vuex.Store({
     },
     getters: {
         getFilteredPosts(state) {
-            let posts = state.posts;
+            const POSTS = state.posts;
             let filtered = [];
-            for (let post of posts) {
-                if (state.search !== '' && post.title.indexOf(state.search) === -1 && post.description.indexOf(state.search) === -1) {
+            for (const POST of POSTS) {
+                if (state.search !== '' && POST.title.indexOf(state.search) === -1 && POST.description.indexOf(state.search) === -1) {
                     continue;
                 }
-                if (state.postsIdByUserId.length && !state.postsIdByUserId.includes(post.id)) {
+                if (state.postsIdByUserId.length && !state.postsIdByUserId.includes(POST.id)) {
                     continue;
                 }
-                filtered.push(post);
+                filtered.push(POST);
             }
             return filtered
         },
+
         getUserIds(state) {
-            return [...new Set(state.posts.map(post => post.userId))];
+            return [...new Set(state.posts.map(POST => POST.userId))];
         },
     },
     mutations: {
-        setPosts(state, payload) {
+        SET_POSTS(state, payload) {
             state.posts = [...payload];
         },
-        setPostsIdByUserId(state, payload) {
+
+        SET_POSTS_ID_BY_USER_ID(state, payload) {
             state.postsIdByUserId = [...payload];
         },
-        deletePostById(state, payload) {
+
+        DELETE_POST_BY_ID(state, payload) {
             const POSTS = [...state.posts];
             const INDEX = POSTS.findIndex(POST => POST.id === payload);
             if (INDEX !== -1) {
@@ -44,15 +47,25 @@ export default new Vuex.Store({
                 state.posts = [...POSTS];
             }
         },
-        clearPostsIdByUserId(state) {
+
+        CLEAR_POSTS_ID_BY_USER_ID(state) {
             state.postsIdByUserId = [];
         },
-        setFilters(state, payload) {
+
+        SET_FILTERS(state, payload) {
             state.search = payload;
         },
     },
     actions: {
-        async getPosts({commit}) {
+        SET_FILTERS({commit}, filterSearch) {
+            commit('SET_FILTERS', filterSearch)
+        },
+
+        CLEAR_POSTS_ID_BY_USER_ID({commit}) {
+            commit('CLEAR_POSTS_ID_BY_USER_ID')
+        },
+
+        async GET_POSTS({commit}) {
             const RESPONSE = await axios.get('http://jsonplaceholder.typicode.com/posts')
             const DATA = RESPONSE.data.map(ITEM => {
                 return {
@@ -62,21 +75,24 @@ export default new Vuex.Store({
                     description: ITEM.body,
                 }
             })
-            commit('setPosts', DATA)
+            commit('SET_POSTS', DATA)
         },
-        async getPostsByUserId({commit}, userId) {
+
+        async GET_POSTS_BY_USER_ID({commit}, userId) {
             const RESPONSE = await axios.get(`http://jsonplaceholder.typicode.com/posts?userId=${userId}`)
             const DATA = RESPONSE.data.map(POST => {
                 return POST.id;
             });
-            commit('setPostsIdByUserId', DATA)
+            commit('SET_POSTS_ID_BY_USER_ID', DATA)
         },
-        async getPostById(context, postId) {
+
+        async GET_POST_BY_ID(context, postId) {
             return await axios.get('http://jsonplaceholder.typicode.com/posts', postId)
         },
-        async deletePostById({commit}, postId) {
+
+        async DELETE_POST_BY_ID({commit}, postId) {
             axios.delete(`http://jsonplaceholder.typicode.com/posts/${postId}`)
-                .then(() => commit('deletePostById', postId))
+                .then(() => commit('DELETE_POST_BY_ID', postId))
                 .catch(() => console.log(`error`))
         },
     }
