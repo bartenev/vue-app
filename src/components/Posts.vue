@@ -51,7 +51,9 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: 'Posts',
+
   components: {Post},
+
   data() {
     return {
       filters: {

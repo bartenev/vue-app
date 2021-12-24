@@ -4,6 +4,7 @@
     <p class="post__description">{{data.description}}</p>
     <span class="post__id">userId - {{data.userId}}</span>
     <input type="button" value="Удалить" @click="onClickDeleteButton(data.id)">
+
   </article>
 </template>
 
@@ -12,11 +13,14 @@ import {mapActions} from "vuex";
 
 export default {
   name: 'Post',
+
   props: {
     data: Object
   },
+
   methods: {
     ...mapActions(["DELETE_POST_BY_ID"]),
+
     onClickDeleteButton (id) {
       this.DELETE_POST_BY_ID(id);
     },
