@@ -37,7 +37,12 @@ export default new Vuex.Store({
             state.postsIdByUserId = [...payload];
         },
         deletePostById(state, payload) {
-            state.posts = [...state.posts.filter(post => post.id !== payload)];
+            const POSTS = [...state.posts];
+            const INDEX = POSTS.findIndex(POST => POST.id === payload);
+            if (INDEX !== -1) {
+                POSTS.splice(INDEX, 1);
+                state.posts = [...POSTS];
+            }
         },
         clearPostsIdByUserId(state) {
             state.postsIdByUserId = [];
