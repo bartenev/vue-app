@@ -41,6 +41,7 @@
         <Post
             :data="{title: post.title, description: post.description, userId: post.userId, id: post.id}"
             :isPostPage="false"
+            :isEdit="false"
         />
       </li>
     </ul>

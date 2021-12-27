@@ -5,8 +5,9 @@
   >
     <h2 class="post__title">{{data.title}}</h2>
     <p class="post__description">{{data.description}}</p>
-    <span class="post__id">Пользователь №{{data.userId}}</span>
-    <button class="post__delete" @click="onClickDeleteButton(data.id)">Удалить</button>
+    <p class="post__id">Пользователь №{{data.userId}}</p>
+    <button class="post__delete" type="button" @click="onClickDeleteButton(data.id)">Удалить</button>
+    <button class="post__edit" type="button" @click="onClickEditButton" v-if="isPostPage" aria-label="Редактировать">...</button>
 
   </article>
 </template>
@@ -31,6 +32,10 @@ export default {
         this.$router.push({path: `/posts`});
       }
     },
+
+    onClickEditButton () {
+      this.$emit('editPost', true)
+    },
   }
 }
 
@@ -46,6 +51,7 @@ export default {
   box-sizing: border-box;
   padding: 20px;
   border: 2px solid lightgray;
+  cursor: pointer;
 }
 
 .post:hover {
@@ -71,7 +77,12 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border: 2px solid lightgray;
+  border-top: 2px solid lightgray;
+  border-bottom: 2px solid lightgray;
+}
+
+.post__id {
+  margin: 0;
 }
 
 .post__delete {
@@ -111,13 +122,33 @@ export default {
   transform: rotate(-45deg);
 }
 
+.post__edit {
+  position: absolute;
+  top: 10px;
+  right: 40px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  color: lightgray;
+}
+
+.post__edit:hover {
+  color: black;
+}
+
 .post--page{
   width: 100%;
   height: auto;
+  cursor: auto;
 }
 
 .post--page:hover {
-  border: 2px solid lightgray;;
+  border: 2px solid lightgray;
 }
 
 .post--page .post__title {
