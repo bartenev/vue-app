@@ -87,8 +87,10 @@ export default {
     },
 
     onClickPost (evt) {
-      const ID = evt.currentTarget.id;
-      this.$router.push({path: `/posts/${ID}`});
+      if (evt.target.tagName !== "BUTTON") {
+        const ID = evt.currentTarget.id;
+        this.$router.push({path: `/posts/${ID}`});
+      }
     },
 
     fetchData() {
@@ -129,8 +131,8 @@ export default {
 }
 .posts__item {
   list-style: none;
-  margin-right: 75px;
-  margin-bottom: 75px;
+  margin-right: 30px;
+  margin-bottom: 30px;
 }
 .posts__item:nth-child(3n) {
   margin-right: 0;

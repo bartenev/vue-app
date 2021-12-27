@@ -1,5 +1,6 @@
 <template>
-  <section>
+  <section class="post-page">
+    <h1>Post №{{id}}</h1>
     <Post
         :data="{title: getPost.title, description: getPost.description, userId: getPost.userId, id: getPost.id}"
         :isPostPage="true"
@@ -44,4 +45,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
+.post-page {
+  width: 900px;
+  margin: auto;
+}
 </style>
