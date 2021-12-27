@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from  'vue-router'
 import Posts from "./components/Posts";
+import PostPage from "./components/PostPage";
 
 Vue.use(VueRouter)
 
@@ -12,6 +13,10 @@ const routes = [
     {
         path: "/",
         redirect: "/posts"
+    },
+    {
+        path: "/posts/:id",
+        component: PostPage,
     },
     {
         path: "*",

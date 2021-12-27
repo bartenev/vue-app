@@ -38,7 +38,10 @@
           :id="post.id"
           @click="onClickPost($event)"
       >
-        <Post :data="{title: post.title, description: post.description, userId: post.userId, id: post.id}"/>
+        <Post
+            :data="{title: post.title, description: post.description, userId: post.userId, id: post.id}"
+            :isPostPage="false"
+        />
       </li>
     </ul>
   </section>
@@ -72,19 +75,20 @@ export default {
   },
 
   methods: {
-    ...mapActions(["GET_POSTS", "GET_POSTS_BY_USER_ID", "SET_FILTERS", "CLEAR_POSTS_ID_BY_USER_ID"]),
+    ...mapActions(["GET_POSTS", "GET_POST_IDS_BY_USER_ID", "SET_FILTERS", "CLEAR_POSTS_ID_BY_USER_ID"]),
 
     onClickSubmitFilter() {
       if (this.filters.userId) {
-        this.GET_POSTS_BY_USER_ID(this.filters.userId);
+        this.GET_POST_IDS_BY_USER_ID(this.filters.userId);
       } else {
         this.CLEAR_POSTS_ID_BY_USER_ID();
       }
       this.SET_FILTERS(this.filters.search);
     },
 
-    onClickPost () {
-      // this.deletePostById(Number(evt.currentTarget.id));
+    onClickPost (evt) {
+      const ID = evt.currentTarget.id;
+      this.$router.push({path: `/posts/${ID}`});
     },
 
     fetchData() {

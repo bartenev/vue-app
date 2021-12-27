@@ -1,5 +1,8 @@
 <template>
-  <article class="post">
+  <article
+      class="post"
+      :class="{'post--page': isPostPage}"
+  >
     <h2 class="post__title">{{data.title}}</h2>
     <p class="post__description">{{data.description}}</p>
     <span class="post__id">userId - {{data.userId}}</span>
@@ -15,7 +18,8 @@ export default {
   name: 'Post',
 
   props: {
-    data: Object
+    data: Object,
+    isPostPage: Boolean,
   },
 
   methods: {
@@ -38,6 +42,10 @@ export default {
   border: 1px solid grey;
   box-sizing: border-box;
   padding: 10px;
+}
+
+.post.post--page{
+  width: 500px;
 }
 
 .post__title {
