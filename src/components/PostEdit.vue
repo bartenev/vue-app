@@ -10,11 +10,13 @@
       <textarea class="post-edit__textarea" id="post-edit__description" v-model="description"></textarea>
     </div>
 
-    <button class="post-edit__save" type="button" @click="onClickSaveButton">Сохранить</button>
+    <button class="post-edit__save" type="button" @click="onClickSaveButton(data.id)">Сохранить</button>
   </article>
 </template>
 
 <script>
+
+import {mapActions} from "vuex";
 
 export default {
   name: 'PostEdit',
@@ -32,8 +34,17 @@ export default {
   },
 
   methods: {
-    onClickSaveButton () {
-      console.log(`save`);
+    ...mapActions(["EDIT_POST"]),
+
+    onClickSaveButton (id) {
+      const newData = {
+        id: id,
+        title: this.title,
+        description: this.description,
+      };
+      console.log(newData)
+      this.EDIT_POST(newData);
+      this.$emit('editPost', false)
     },
   },
 }

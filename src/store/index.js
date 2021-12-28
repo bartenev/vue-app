@@ -59,6 +59,15 @@ export default new Vuex.Store({
             }
         },
 
+        EDIT_POST(state, payload) {
+            const POSTS = [...state.posts];
+            const INDEX = POSTS.findIndex(POST => POST.id === payload);
+            if (INDEX !== -1) {
+                POSTS.splice(INDEX, 1, payload);
+                state.posts = [...POSTS];
+            }
+        },
+
         CLEAR_POSTS_ID_BY_USER_ID(state) {
             state.postsIdByUserId = [];
         },
@@ -106,7 +115,25 @@ export default new Vuex.Store({
         async DELETE_POST_BY_ID({commit}, postId) {
             axios.delete(`http://jsonplaceholder.typicode.com/posts/${postId}`)
                 .then(() => commit('DELETE_POST_BY_ID', postId))
-                .catch(() => console.log(`error`))
+                .catch(() => console.log(`error delete`))
+        },
+
+        async EDIT_POST({commit}, newData) {
+            console.log(newData)
+            const RESPONSE = axios.patch(`http://jsonplaceholder.typicode.com/posts/${newData.id}`, {
+                title: newData.title,
+                body: newData.description,
+            });
+
+            const DATA = RESPONSE.data;
+            const ADAPTED_DATA = {
+                userId: DATA.userId,
+                id: DATA.id,
+                title: DATA.title,
+                description: DATA.body,
+            };
+
+            commit('EDIT_POST', ADAPTED_DATA);
         },
 
         SET_FILTERS({commit}, filterSearch) {

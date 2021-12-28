@@ -12,6 +12,7 @@
 
     <PostEdit
         :data="{title: getPost.title, description: getPost.description, userId: getPost.userId, id: getPost.id}"
+        @editPost="editPost"
         v-else
     />
 
