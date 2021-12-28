@@ -68,6 +68,7 @@ export default {
 
 .post-edit__textarea {
   height: 100%;
+  padding: 10px;
   box-sizing: border-box;
   border: 2px solid lightgray;
   resize: none;
