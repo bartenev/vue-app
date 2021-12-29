@@ -45,6 +45,14 @@ export default new Vuex.Store({
 
         SET_POST(state, payload) {
             state.post = {...payload};
+
+            const POSTS = [...state.posts];
+            const INDEX = POSTS.findIndex(POST => POST.id === payload.id);
+
+            if (INDEX !== -1) {
+                POSTS.splice(INDEX, 1, payload);
+                state.posts = [...POSTS];
+            }
         },
 
         SET_POSTS_ID_BY_USER_ID(state, payload) {
@@ -62,7 +70,8 @@ export default new Vuex.Store({
 
         EDIT_POST(state, payload) {
             const POSTS = [...state.posts];
-            const INDEX = POSTS.findIndex(POST => POST.id === payload);
+            const INDEX = POSTS.findIndex(POST => POST.id === payload.id);
+
             if (INDEX !== -1) {
                 POSTS.splice(INDEX, 1, payload);
                 state.posts = [...POSTS];

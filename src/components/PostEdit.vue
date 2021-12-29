@@ -42,7 +42,7 @@ export default {
         title: this.title,
         description: this.description,
       };
-      console.log(newData)
+
       this.EDIT_POST(newData);
       this.$emit('editPost', false)
     },
@@ -51,7 +51,6 @@ export default {
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .post-edit__block {
