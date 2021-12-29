@@ -48,8 +48,7 @@ export default {
     ...mapActions(["GET_POST_BY_ID"]),
 
     editPost(data) {
-      this.isEdit = !this.isEdit;
-      console.log(`updateME ${data}`);
+      this.isEdit = data;
     },
 
     fetchData() {

@@ -1,48 +1,50 @@
 <template>
   <section class="posts">
-    <h2>Posts ({{getFilteredPosts.length}})</h2>
-    <form class="posts__filter filter">
-      <div class="filter__field">
-        <label class="filter__label" for="search">Ключевое слово</label>
-        <input
-            class="filter__input"
-            v-model="filters.search"
-            id="search"
-            type="text"
-        >
-      </div>
-      <div class="filter__field">
-        <label class="filter__label" for="userId">userId</label>
-        <select
-            class="filter__input"
-            v-model="filters.userId"
-            id="userId"
-        >
-          <option :value="null"></option>
-          <option
-              v-for="id in getUserIds"
-              :key="id"
-              :value="id"
+    <div class="posts__container">
+      <h2 class="posts__title">Posts ({{getFilteredPosts.length}})</h2>
+      <form class="posts__filter filter">
+        <div class="filter__field">
+          <label class="filter__label" for="search">Ключевое слово</label>
+          <input
+              class="filter__input"
+              v-model="filters.search"
+              id="search"
+              type="text"
           >
-            {{id}}
-          </option>
-        </select>
-      </div>
-      <input
-          class="filter__submit"
-          type="submit"
-          value="Применить"
-          @click.prevent="onClickSubmitFilter"
-          :disabled="!checkForm"
-      >
+        </div>
+        <div class="filter__field">
+          <label class="filter__label" for="userId">userId</label>
+          <select
+              class="filter__input"
+              v-model="filters.userId"
+              id="userId"
+          >
+            <option :value="null"></option>
+            <option
+                v-for="id in getUserIds"
+                :key="id"
+                :value="id"
+            >
+              {{id}}
+            </option>
+          </select>
+        </div>
+        <input
+            class="filter__submit"
+            type="submit"
+            value="Применить"
+            @click.prevent="onClickSubmitFilter"
+            :disabled="!checkForm"
+        >
 
-      <input
-          class="filter__reset"
-          type="reset"
-          value="Очистить"
-          @click.prevent="onClickResetFilter"
-      >
-    </form>
+        <input
+            class="filter__reset"
+            type="reset"
+            value="Очистить"
+            @click.prevent="onClickResetFilter"
+        >
+      </form>
+    </div>
     <ul class="posts__list">
       <li
           class="posts__item"
@@ -82,7 +84,9 @@ export default {
   },
 
   created() {
-    this.fetchData()
+    if (!this.getFilteredPosts.length) {
+      this.fetchData();
+    }
   },
 
   computed: {
@@ -129,7 +133,6 @@ export default {
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .posts {
@@ -137,14 +140,24 @@ export default {
   margin: auto;
 }
 
+.posts__container {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.posts__title {
+  width: 280px;
+  margin: 0 30px 0 0;
+}
+
 .posts__filter {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  order: -1;
 
   width: 280px;
-  margin-left: auto;
-  margin-bottom: 20px;
+  margin-right: 30px;
   box-sizing: border-box;
   padding: 20px;
   border: 2px solid lightgray;

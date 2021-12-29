@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from "axios";
+import {normalizePost} from "../common/helpers";
 
 Vue.use(Vuex);
 
@@ -80,14 +81,7 @@ export default new Vuex.Store({
     actions: {
         async GET_POSTS({commit}) {
             const RESPONSE = await axios.get('http://jsonplaceholder.typicode.com/posts')
-            const DATA = RESPONSE.data.map(ITEM => {
-                return {
-                    userId: ITEM.userId,
-                    id: ITEM.id,
-                    title: ITEM.title,
-                    description: ITEM.body,
-                }
-            })
+            const DATA = RESPONSE.data.map(POST => normalizePost(POST))
             commit('SET_POSTS', DATA);
         },
 
@@ -102,12 +96,7 @@ export default new Vuex.Store({
         async GET_POST_BY_ID({commit}, postId) {
             const RESPONSE = await axios.get(`http://jsonplaceholder.typicode.com/posts/${postId}`);
             const DATA = RESPONSE.data;
-            const ADAPTED_DATA = {
-                userId: DATA.userId,
-                id: DATA.id,
-                title: DATA.title,
-                description: DATA.body,
-            };
+            const ADAPTED_DATA = normalizePost(DATA);
 
             commit('SET_POST', ADAPTED_DATA);
         },
@@ -119,21 +108,16 @@ export default new Vuex.Store({
         },
 
         async EDIT_POST({commit}, newData) {
-            console.log(newData)
-            const RESPONSE = axios.patch(`http://jsonplaceholder.typicode.com/posts/${newData.id}`, {
+            const RESPONSE = await axios.patch(`http://jsonplaceholder.typicode.com/posts/${newData.id}`, {
                 title: newData.title,
                 body: newData.description,
             });
 
             const DATA = RESPONSE.data;
-            const ADAPTED_DATA = {
-                userId: DATA.userId,
-                id: DATA.id,
-                title: DATA.title,
-                description: DATA.body,
-            };
+            const ADAPTED_DATA = normalizePost(DATA);
 
             commit('EDIT_POST', ADAPTED_DATA);
+            commit('SET_POST', ADAPTED_DATA);
         },
 
         SET_FILTERS({commit}, filterSearch) {
