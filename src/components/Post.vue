@@ -5,7 +5,8 @@
   >
     <h2 class="post__title">{{data.title}}</h2>
     <p class="post__description">{{data.description}}</p>
-    <p class="post__id">Пользователь №{{data.userId}}</p>
+    <button class="post__user-id post__user-id--button" @click="onClickUserId(data.userId)" v-if="!isPostPage">Пользователь №{{data.userId}}</button>
+    <p class="post__user-id" v-else>Пользователь №{{data.userId}}</p>
     <button class="post__delete" type="button" @click="onClickDeleteButton(data.id)">Удалить</button>
     <button class="post__edit" type="button" @click="onClickEditButton" v-if="isPostPage" aria-label="Редактировать">...</button>
 
@@ -31,6 +32,10 @@ export default {
       if (this.isPostPage) {
         this.$router.push({path: `/posts`});
       }
+    },
+
+    onClickUserId(id) {
+      this.$emit('onClickUserId', id)
     },
 
     onClickEditButton () {
@@ -81,8 +86,16 @@ export default {
   border-bottom: 2px solid lightgray;
 }
 
-.post__id {
+.post__user-id {
+  background-color: transparent;
+  border: none;
   margin: 0;
+  font: inherit;
+}
+
+.post__user-id--button:hover {
+  color: lightgray;
+  cursor: pointer;
 }
 
 .post__delete {
