@@ -48,7 +48,7 @@
     <ul class="posts__list">
       <li
           class="posts__item"
-          v-for="post in getFilteredPosts"
+          v-for="post in getPosts"
           :key="post.id"
           :id="post.id"
           @click="onClickPost($event)"
@@ -61,13 +61,25 @@
         />
       </li>
     </ul>
+    <ul class="posts__pagination pagination__list">
+      <li
+          class="pagination__item"
+          :class="{'pagination__item--current': pageNumber === currentPageNumber}"
+          v-for="pageNumber in getPageNumbers"
+          :key="pageNumber"
+          @click="onPaginationClick($event)"
+      >
+        {{pageNumber}}
+      </li>
+
+    </ul>
   </section>
 </template>
 
 <script>
 
 import Post from "./Post";
-import {mapActions, mapGetters} from "vuex";
+import {mapState, mapActions, mapGetters} from "vuex";
 
 export default {
   name: 'Posts',
@@ -85,7 +97,7 @@ export default {
   },
 
   created() {
-    if (!this.getFilteredPosts.length) {
+    if (!this.posts.length) {
       this.fetchData();
     }
 
@@ -93,7 +105,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getFilteredPosts", "getUserIds"]),
+    ...mapState(["posts", "currentPageNumber"]),
+
+    ...mapGetters(["getFilteredPosts", "getPosts", "getUserIds", "getPageNumbers"]),
 
     checkForm() {
       return !!(this.filters.search || this.filters.userId);
@@ -101,7 +115,8 @@ export default {
   },
 
   methods: {
-    ...mapActions(["GET_POSTS", "GET_POST_IDS_BY_USER_ID", "SET_FILTERS", "CLEAR_POSTS_ID_BY_USER_ID"]),
+    ...mapActions(["GET_POSTS", "GET_POST_IDS_BY_USER_ID", "SET_FILTERS",
+      "CLEAR_POSTS_ID_BY_USER_ID", "CHANGE_CURRENT_PAGE_NUMBER", "SET_DEFAULT_CURRENT_PAGE_NUMBER"]),
 
     onClickSubmitFilter() {
       if (this.filters.userId) {
@@ -109,6 +124,7 @@ export default {
       } else {
         this.CLEAR_POSTS_ID_BY_USER_ID();
       }
+      this.SET_DEFAULT_CURRENT_PAGE_NUMBER();
       this.SET_FILTERS(this.filters.search);
     },
 
@@ -118,11 +134,12 @@ export default {
 
       this.CLEAR_POSTS_ID_BY_USER_ID();
       this.SET_FILTERS('');
+      this.SET_DEFAULT_CURRENT_PAGE_NUMBER();
     },
 
     onClickUserId(id) {
-      this.$data.filters.userId = id;
-      this.GET_POST_IDS_BY_USER_ID(this.filters.userId);
+      this.filters.userId = id;
+      this.onClickSubmitFilter();
     },
 
     onClickPost (evt) {
@@ -130,6 +147,11 @@ export default {
         const ID = evt.currentTarget.id;
         this.$router.push({path: `/posts/${ID}`});
       }
+    },
+
+    onPaginationClick (evt) {
+      const PAGE_NUMBER = Number(evt.target.textContent);
+      this.CHANGE_CURRENT_PAGE_NUMBER(PAGE_NUMBER);
     },
 
     fetchData() {
@@ -233,6 +255,33 @@ export default {
 
 .posts__item:nth-child(3n) {
   margin-right: 0;
+}
+
+.pagination__list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 30px;
+  padding: 0;
+}
+
+.pagination__item {
+  margin-right: 20px;
+  margin-bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border: 2px solid lightgray;
+  list-style: none;
+  line-height: 50px;
+  cursor: pointer;
+}
+
+.pagination__item:hover {
+  border: 2px solid black;
+}
+
+.pagination__item--current {
+  background-color: black;
+  color: white;
 }
 
 </style>

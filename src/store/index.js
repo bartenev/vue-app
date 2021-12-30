@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from "axios";
 import {normalizePost} from "../common/helpers";
+import {NUMBER_OF_POSTS_PER_PAGE} from "../common/constants";
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
         post: [],
         search: '',
         postsIdByUserId: [],
+        currentPageNumber: 1,
     },
 
     getters: {
@@ -26,16 +28,31 @@ export default new Vuex.Store({
                 }
                 filtered.push(POST);
             }
-            return filtered
+            return filtered;
         },
 
-        getUserIds(state) {
-            return [...new Set(state.posts.map(POST => POST.userId))];
+        getPosts(state, getters) {
+            const filteredPosts = getters.getFilteredPosts;
+
+            const START_INDEX = state.currentPageNumber * NUMBER_OF_POSTS_PER_PAGE - NUMBER_OF_POSTS_PER_PAGE;
+            const END_INDEX = state.currentPageNumber * NUMBER_OF_POSTS_PER_PAGE;
+
+            return filteredPosts.slice(START_INDEX, END_INDEX);
+        },
+
+        getPageNumbers(state, getters) {
+            const filteredPosts = getters.getFilteredPosts;
+            const LAST_PAGE_NUMBER = Math.ceil(filteredPosts.length / NUMBER_OF_POSTS_PER_PAGE);
+            return Array.from({length: LAST_PAGE_NUMBER}, (item, key) => ++key)
         },
 
         getPost(state) {
             return state.post;
-        }
+        },
+
+        getUserIds(state, getters) {
+            return [...new Set(getters.getFilteredPosts.map(POST => POST.userId))];
+        },
     },
 
     mutations: {
@@ -85,6 +102,14 @@ export default new Vuex.Store({
         SET_FILTERS(state, payload) {
             state.search = payload;
         },
+
+        CHANGE_CURRENT_PAGE_NUMBER(state, payload) {
+            state.currentPageNumber = payload;
+        },
+
+        SET_DEFAULT_CURRENT_PAGE_NUMBER(state) {
+            state.currentPageNumber = 1;
+        }
     },
 
     actions: {
@@ -135,6 +160,14 @@ export default new Vuex.Store({
 
         CLEAR_POSTS_ID_BY_USER_ID({commit}) {
             commit('CLEAR_POSTS_ID_BY_USER_ID')
+        },
+
+        CHANGE_CURRENT_PAGE_NUMBER({commit}, page) {
+            commit('CHANGE_CURRENT_PAGE_NUMBER', page);
+        },
+
+        SET_DEFAULT_CURRENT_PAGE_NUMBER({commit}) {
+            commit('SET_DEFAULT_CURRENT_PAGE_NUMBER');
         },
     }
 });
