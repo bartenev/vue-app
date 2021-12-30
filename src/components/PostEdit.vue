@@ -10,7 +10,7 @@
       <textarea class="post-edit__textarea" id="post-edit__description" v-model="description"></textarea>
     </div>
 
-    <button class="post-edit__save" type="button" @click="onClickSaveButton(data.id)">Сохранить</button>
+    <button class="post-edit__save" type="button" @click="onClickSaveButton">Сохранить</button>
   </article>
 </template>
 
@@ -27,8 +27,8 @@ export default {
 
   data() {
     return {
-      title: this.$props.data.title,
-      description: this.$props.data.description,
+      title: this.data.title,
+      description: this.data.description,
       isEdit: false,
     }
   },
@@ -36,9 +36,9 @@ export default {
   methods: {
     ...mapActions(["EDIT_POST"]),
 
-    onClickSaveButton (id) {
+    onClickSaveButton () {
       const newData = {
-        id: id,
+        id: this.data.id,
         title: this.title,
         description: this.description,
       };

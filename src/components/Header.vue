@@ -10,7 +10,7 @@
 <script>
 
 export default {
-  name: 'AppLayoutHeader',
+  name: 'Header',
 
   data() {
     return {

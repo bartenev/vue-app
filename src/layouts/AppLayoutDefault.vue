@@ -1,24 +1,19 @@
 <template>
   <div class="app-layout-default">
-    <AppLayoutHeader/>
+    <Header/>
     <slot />
   </div>
 </template>
 
 <script>
-import AppLayoutHeader from "./AppLayoutHeader";
+import Header from "../components/Header";
 
 export default {
   name: 'AppLayoutDefault',
 
   components: {
-    AppLayoutHeader
+    Header
   },
-
-  props: {
-
-  }
-
 };
 </script>
 

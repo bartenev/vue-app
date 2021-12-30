@@ -5,9 +5,9 @@
   >
     <h2 class="post__title">{{data.title}}</h2>
     <p class="post__description">{{data.description}}</p>
-    <button class="post__user-id post__user-id--button" @click="onClickUserId(data.userId)" v-if="!isPostPage">Пользователь №{{data.userId}}</button>
+    <button class="post__user-id post__user-id--button" @click="onClickUserId" v-if="!isPostPage">Пользователь №{{data.userId}}</button>
     <p class="post__user-id" v-else>Пользователь №{{data.userId}}</p>
-    <button class="post__delete" type="button" @click="onClickDeleteButton(data.id)">Удалить</button>
+    <button class="post__delete" type="button" @click="onClickDeleteButton">Удалить</button>
     <button class="post__edit" type="button" @click="onClickEditButton" v-if="isPostPage" aria-label="Редактировать">...</button>
 
   </article>
@@ -27,15 +27,15 @@ export default {
   methods: {
     ...mapActions(["DELETE_POST_BY_ID"]),
 
-    onClickDeleteButton (id) {
-      this.DELETE_POST_BY_ID(id);
+    onClickDeleteButton () {
+      this.DELETE_POST_BY_ID(this.data.id);
       if (this.isPostPage) {
         this.$router.push({path: `/posts`});
       }
     },
 
-    onClickUserId(id) {
-      this.$emit('onClickUserId', id)
+    onClickUserId() {
+      this.$emit('onClickUserId', this.data.userId)
     },
 
     onClickEditButton () {
@@ -46,7 +46,6 @@ export default {
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .post {

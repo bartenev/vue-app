@@ -54,7 +54,7 @@
           @click="onClickPost($event)"
       >
         <Post
-            :data="{title: post.title, description: post.description, userId: post.userId, id: post.id}"
+            :data="post"
             :isPostPage="false"
             :isEdit="false"
             @onClickUserId="onClickUserId"
@@ -123,7 +123,6 @@ export default {
     onClickUserId(id) {
       this.$data.filters.userId = id;
       this.GET_POST_IDS_BY_USER_ID(this.filters.userId);
-      console.log(`userId clicked ${id}`)
     },
 
     onClickPost (evt) {

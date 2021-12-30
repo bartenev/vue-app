@@ -1,8 +1,8 @@
 <template>
   <div class="app-layout-main">
-    <AppLayoutHeader/>
+    <Header/>
     <div class="content">
-      <AppLayoutSidebar/>
+      <Sidebar/>
       <slot />
     </div>
   </div>
@@ -10,24 +10,16 @@
 </template>
 
 <script>
-import AppLayoutHeader from "./AppLayoutHeader";
-import AppLayoutSidebar from "./AppLayoutSidebar";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 
 export default {
   name: 'AppLayoutMain',
 
   components: {
-    AppLayoutHeader,
-    AppLayoutSidebar
+    Header,
+    Sidebar
   },
-
-  props: {
-
-  },
-
-  methods: {
-
-  }
 }
 
 </script>

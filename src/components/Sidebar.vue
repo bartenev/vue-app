@@ -7,15 +7,7 @@
 <script>
 
 export default {
-  name: 'AppLayoutSidebar',
-
-  props: {
-
-  },
-
-  methods: {
-
-  }
+  name: 'Sidebar',
 }
 
 </script>

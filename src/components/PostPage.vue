@@ -3,7 +3,7 @@
     <h1>Post №{{id}}</h1>
 
     <Post
-        :data="{title: getPost.title, description: getPost.description, userId: getPost.userId, id: getPost.id}"
+        :data="{...getPost}"
         :isPostPage="true"
         :isEdit="isEdit"
         @editPost="editPost"
@@ -11,7 +11,7 @@
     />
 
     <PostEdit
-        :data="{title: getPost.title, description: getPost.description, userId: getPost.userId, id: getPost.id}"
+        :data="{...getPost}"
         @editPost="editPost"
         v-else
     />
